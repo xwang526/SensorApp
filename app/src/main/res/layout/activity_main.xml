@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/accelerometer_x"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/accelerometer_x" />
+        <TextView
+            android:id="@+id/accelerometer_y"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/accelerometer_y" />
+        <TextView
+            android:id="@+id/accelerometer_z"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:text="@string/accelerometer_z" />
+
+        <TextView
+            android:id="@+id/linear_accelerometer_x"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/linear_accelerometer_x" />
+        <TextView
+            android:id="@+id/linear_accelerometer_y"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/linear_accelerometer_y" />
+        <TextView
+            android:id="@+id/linear_accelerometer_z"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:text="@string/linear_accelerometer_z" />
+
+        <TextView
+            android:id="@+id/gravity_x"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/gravity_x" />
+        <TextView
+            android:id="@+id/gravity_y"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/gravity_y" />
+        <TextView
+            android:id="@+id/gravity_z"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:text="@string/gravity_z" />
+
+        <TextView
+            android:id="@+id/gyroscope_x"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/gyroscope_x" />
+        <TextView
+            android:id="@+id/gyroscope_y"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/gyroscope_y" />
+        <TextView
+            android:id="@+id/gyroscope_z"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:text="@string/gyroscope_z" />
+
+        <TextView
+            android:id="@+id/magnetic_x"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/magnetic_x" />
+
+        <TextView
+            android:id="@+id/magnetic_y"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/magnetic_y" />
+
+        <TextView
+            android:id="@+id/magnetic_z"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:text="@string/magnetic_z" />
+
+        <TextView
+            android:id="@+id/azimuth"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/azimuth" />
+        <TextView
+            android:id="@+id/pitch"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/pitch" />
+        <TextView
+            android:id="@+id/roll"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/roll" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
