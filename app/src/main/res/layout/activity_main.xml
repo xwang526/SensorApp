@@ -13,22 +13,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/accelerometer_x"
-            android:layout_width="300dp"
-            android:layout_height="20dp"
-            android:text="@string/accelerometer_x" />
-        <TextView
-            android:id="@+id/accelerometer_y"
-            android:layout_width="300dp"
-            android:layout_height="20dp"
-            android:text="@string/accelerometer_y" />
-        <TextView
-            android:id="@+id/accelerometer_z"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:text="@string/accelerometer_z" />
-
-        <TextView
             android:id="@+id/linear_accelerometer_x"
             android:layout_width="300dp"
             android:layout_height="20dp"

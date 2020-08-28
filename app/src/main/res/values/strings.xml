@@ -3,10 +3,6 @@
 
     <string name="error_no_sensor">No Sensor</string>
 
-    <string name="accelerometer_x">Accelerometer(x-axis) Sensor: %1$.6f</string>
-    <string name="accelerometer_y">Accelerometer(y-axis) Sensor: %1$.6f</string>
-    <string name="accelerometer_z">Accelerometer(z-axis) Sensor: %1$.6f</string>
-
     <string name="gravity_x">Gravity(x-axis) Sensor: %1$.6f</string>
     <string name="gravity_y">Gravity(y-axis) Sensor: %1$.6f</string>
     <string name="gravity_z">Gravity(z-axis) Sensor: %1$.6f</string>
