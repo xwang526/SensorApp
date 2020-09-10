@@ -13,6 +13,22 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/azimuth"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/azimuth" />
+        <TextView
+            android:id="@+id/pitch"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/pitch" />
+        <TextView
+            android:id="@+id/roll"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/roll" />
+
+        <TextView
             android:id="@+id/linear_accelerometer_x"
             android:layout_width="300dp"
             android:layout_height="20dp"
@@ -78,21 +94,21 @@
             android:layout_height="40dp"
             android:text="@string/magnetic_z" />
 
-        <TextView
-            android:id="@+id/azimuth"
-            android:layout_width="300dp"
-            android:layout_height="20dp"
-            android:text="@string/azimuth" />
-        <TextView
-            android:id="@+id/pitch"
-            android:layout_width="300dp"
-            android:layout_height="20dp"
-            android:text="@string/pitch" />
-        <TextView
-            android:id="@+id/roll"
-            android:layout_width="300dp"
-            android:layout_height="20dp"
-            android:text="@string/roll" />
+<!--        <TextView-->
+<!--            android:id="@+id/azimuth"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:text="@string/azimuth" />-->
+<!--        <TextView-->
+<!--            android:id="@+id/pitch"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:text="@string/pitch" />-->
+<!--        <TextView-->
+<!--            android:id="@+id/roll"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:text="@string/roll" />-->
 
     </LinearLayout>
 

@@ -3,24 +3,24 @@
 
     <string name="error_no_sensor">No Sensor</string>
 
-    <string name="gravity_x">Gravity(x-axis) Sensor: %1$.6f</string>
-    <string name="gravity_y">Gravity(y-axis) Sensor: %1$.6f</string>
-    <string name="gravity_z">Gravity(z-axis) Sensor: %1$.6f</string>
+    <string name="gravity_x">Gravity(x-axis) Sensor: %1$.4f</string>
+    <string name="gravity_y">Gravity(y-axis) Sensor: %1$.4f</string>
+    <string name="gravity_z">Gravity(z-axis) Sensor: %1$.4f</string>
 
-    <string name="linear_accelerometer_x">Linear Accelerometer(x-axis) Sensor: %1$.6f</string>
-    <string name="linear_accelerometer_y">Linear Accelerometer(y-axis) Sensor: %1$.6f</string>
-    <string name="linear_accelerometer_z">Linear Accelerometer(z-axis) Sensor: %1$.6f</string>
+    <string name="linear_accelerometer_x">Linear Accelerometer(x-axis) Sensor: %1$.4f</string>
+    <string name="linear_accelerometer_y">Linear Accelerometer(y-axis) Sensor: %1$.4f</string>
+    <string name="linear_accelerometer_z">Linear Accelerometer(z-axis) Sensor: %1$.4f</string>
 
-    <string name="gyroscope_x">Gyroscope(x-axis) Sensor: %1$.6f</string>
-    <string name="gyroscope_y">Gyroscope(y-axis) Sensor: %1$.6f</string>
-    <string name="gyroscope_z">Gyroscope(z-axis) Sensor: %1$.6f</string>
+    <string name="gyroscope_x">Gyroscope(x-axis) Sensor: %1$.4f</string>
+    <string name="gyroscope_y">Gyroscope(y-axis) Sensor: %1$.4f</string>
+    <string name="gyroscope_z">Gyroscope(z-axis) Sensor: %1$.4f</string>
 
-    <string name="magnetic_x">Magnetic(x-axis) Sensor: %1$.6f</string>
-    <string name="magnetic_y">Magnetic(y-axis) Sensor: %1$.6f</string>
-    <string name="magnetic_z">Magnetic(z-axis) Sensor: %1$.6f</string>
+    <string name="magnetic_x">Magnetic(x-axis) Sensor: %1$.4f</string>
+    <string name="magnetic_y">Magnetic(y-axis) Sensor: %1$.4f</string>
+    <string name="magnetic_z">Magnetic(z-axis) Sensor: %1$.4f</string>
 
-    <string name="azimuth">Azimuth Angle: %1.6f</string>
-    <string name="pitch">Pitch Angle: %1.6f</string>
-    <string name="roll">Roll angle: %1.6f</string>
+    <string name="azimuth">Azimuth Angle: %1.4f</string>
+    <string name="pitch">Pitch Angle: %1.4f</string>
+    <string name="roll">Roll angle: %1.4f</string>
 
 </resources>

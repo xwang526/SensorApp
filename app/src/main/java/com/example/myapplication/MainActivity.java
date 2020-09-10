@@ -11,18 +11,22 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Surface;
 import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity
         implements SensorEventListener {
 
     // System sensor manager instance.
     private SensorManager mSensorManager;
+    private Display mDisplay;
 
     // Gravity sensor
     private Sensor mSensorGravityX;
@@ -33,6 +37,11 @@ public class MainActivity extends AppCompatActivity
     private Sensor mSensorLinearAccelerometerX;
     private Sensor mSensorLinearAccelerometerY;
     private Sensor mSensorLinearAccelerometerZ;
+
+    // Accelerometer sensor
+    private Sensor mSensorAccelerometerX;
+    private Sensor mSensorAccelerometerY;
+    private Sensor mSensorAccelerometerZ;
 
     // Gyroscope sensor
     private Sensor mSensorGyroscopeX;
@@ -84,6 +93,7 @@ public class MainActivity extends AppCompatActivity
 
     // device coordinate
     private final float[] linearAccelerometerArray = new float[3];
+    private final float[] accelerometerArray = new float[3];
     private final float[] gravityArray = new float[3];
     private final float[] gyroscopeArray = new float[3];
     private final float[] magnetometerArray = new float[3];
@@ -97,6 +107,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // initialize
+        mSensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 
         // check storage permission
         int permission = ActivityCompat.checkSelfPermission(
@@ -158,6 +171,10 @@ public class MainActivity extends AppCompatActivity
         mSensorLinearAccelerometerY = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         mSensorLinearAccelerometerZ = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
+        mSensorAccelerometerX = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorAccelerometerY = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorAccelerometerZ = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
         mSensorGyroscopeX = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mSensorGyroscopeY = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mSensorGyroscopeZ = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
@@ -198,67 +215,80 @@ public class MainActivity extends AppCompatActivity
         // register sensor listener
         if (mSensorGravityX != null) {
             mSensorManager.registerListener(this, mSensorGravityX,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorGravityY != null) {
             mSensorManager.registerListener(this, mSensorGravityY,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorGravityZ != null) {
             mSensorManager.registerListener(this, mSensorGravityZ,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
 
         if (mSensorLinearAccelerometerX != null) {
             mSensorManager.registerListener(this, mSensorLinearAccelerometerX,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorLinearAccelerometerY != null) {
             mSensorManager.registerListener(this, mSensorLinearAccelerometerY,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
-        if (mSensorLinearAccelerometerY != null) {
+        if (mSensorLinearAccelerometerZ != null) {
             mSensorManager.registerListener(this, mSensorLinearAccelerometerY,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
+        }
+
+        if (mSensorAccelerometerX != null) {
+            mSensorManager.registerListener(this, mSensorAccelerometerX,
+                    10000);
+        }
+        if (mSensorAccelerometerY != null) {
+            mSensorManager.registerListener(this, mSensorAccelerometerY,
+                    10000);
+        }
+        if (mSensorAccelerometerZ != null) {
+            mSensorManager.registerListener(this, mSensorAccelerometerY,
+                    10000);
         }
 
         if (mSensorGyroscopeX != null) {
             mSensorManager.registerListener(this, mSensorGyroscopeX,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorGyroscopeY != null) {
             mSensorManager.registerListener(this, mSensorGyroscopeY,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorGyroscopeZ != null) {
             mSensorManager.registerListener(this, mSensorGyroscopeZ,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
 
         if (mSensorMagneticX != null) {
             mSensorManager.registerListener(this, mSensorMagneticX,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorMagneticY != null) {
             mSensorManager.registerListener(this, mSensorMagneticY,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorMagneticZ != null) {
             mSensorManager.registerListener(this, mSensorMagneticZ,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
 
         if (mSensorRotationX != null) {
             mSensorManager.registerListener(this, mSensorRotationX,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorRotationY != null) {
             mSensorManager.registerListener(this, mSensorRotationY,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
         if (mSensorRotationZ != null) {
             mSensorManager.registerListener(this, mSensorRotationZ,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    10000);
         }
     }
 
@@ -282,30 +312,8 @@ public class MainActivity extends AppCompatActivity
         File outfile = new File(dir, "output.csv");
 
         switch (sensorType) {
-            case Sensor.TYPE_ROTATION_VECTOR:
-                SensorManager.getRotationMatrix(rotationMatrix, null, gravityArray, magnetometerArray);
-                SensorManager.getOrientation(rotationMatrix, orientationAngles);
-                mTextSensorAzimuth.setText(getResources().getString(R.string.azimuth, orientationAngles[0]));
-                mTextSensorPitch.setText(getResources().getString(R.string.pitch, orientationAngles[1]));
-                mTextSensorRoll.setText(getResources().getString(R.string.roll, orientationAngles[2]));
-                outfile = new File(dir, "orientation.csv");
-                entry = String.format(Locale.CHINA, "orientation angles, %f, %f, %f\n", orientationAngles[0], orientationAngles[1], orientationAngles[2]);
-                break;
-            case Sensor.TYPE_GRAVITY:
-                mTextSensorGravityX.setText(getResources().getString(R.string.gravity_x, currentValue1));
-                mTextSensorGravityY.setText(getResources().getString(R.string.gravity_y, currentValue2));
-                mTextSensorGravityZ.setText(getResources().getString(R.string.gravity_z, currentValue3));
-                System.arraycopy(sensorEvent.values, 0, gravityArray, 0, gravityArray.length);
-                outfile = new File(dir, "Gravity.csv");
-                entry = String.format(Locale.CHINA,"gravity, %f, %f, %f\n", currentValue1, currentValue2, currentValue3);
-                break;
-            case Sensor.TYPE_LINEAR_ACCELERATION:
-                mTextSensorLinearAccelerometerX.setText(getResources().getString(R.string.linear_accelerometer_x, currentValue1));
-                mTextSensorLinearAccelerometerY.setText(getResources().getString(R.string.linear_accelerometer_y, currentValue2));
-                mTextSensorLinearAccelerometerZ.setText(getResources().getString(R.string.linear_accelerometer_z, currentValue3));
-                outfile = new File(dir, "LinearAccelerometer.csv");
-                System.arraycopy(sensorEvent.values, 0, linearAccelerometerArray, 0, linearAccelerometerArray.length);
-                entry = String.format(Locale.CHINA,"linear accelerometer, %f, %f, %f\n", currentValue1, currentValue2, currentValue3);
+            case Sensor.TYPE_ACCELEROMETER:
+                System.arraycopy(sensorEvent.values, 0, accelerometerArray, 0, accelerometerArray.length);
                 break;
             case Sensor.TYPE_GYROSCOPE:
                 mTextSensorGyroscopeX.setText(getResources().getString(R.string.gyroscope_x, currentValue1));
@@ -313,7 +321,7 @@ public class MainActivity extends AppCompatActivity
                 mTextSensorGyroscopeZ.setText(getResources().getString(R.string.gyroscope_z, currentValue3));
                 System.arraycopy(sensorEvent.values, 0, gyroscopeArray, 0, gyroscopeArray.length);
                 outfile = new File(dir, "Gyroscope.csv");
-                entry = String.format(Locale.CHINA,"gyroscope, %f, %f, %f\n", currentValue1, currentValue2, currentValue3);
+                entry = String.format(Locale.CHINA,"gyroscope, %.4f, %.4f, %.4f\n", currentValue1, currentValue2, currentValue3);
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD:
                 mTextSensorMagneticX.setText(getResources().getString(R.string.magnetic_x, currentValue1));
@@ -321,7 +329,35 @@ public class MainActivity extends AppCompatActivity
                 mTextSensorMagneticZ.setText(getResources().getString(R.string.magnetic_z, currentValue3));
                 outfile = new File(dir, "Magnetic.csv");
                 System.arraycopy(sensorEvent.values, 0, magnetometerArray, 0, magnetometerArray.length);
-                entry = String.format(Locale.CHINA, "magnetic, %f, %f, %f\n", currentValue1, currentValue2, currentValue3);
+                entry = String.format(Locale.CHINA, "magnetic, %.4f, %.4f, %.4f\n", currentValue1, currentValue2, currentValue3);
+                break;
+            case Sensor.TYPE_GRAVITY:
+                mTextSensorGravityX.setText(getResources().getString(R.string.gravity_x, currentValue1));
+                mTextSensorGravityY.setText(getResources().getString(R.string.gravity_y, currentValue2));
+                mTextSensorGravityZ.setText(getResources().getString(R.string.gravity_z, currentValue3));
+                System.arraycopy(sensorEvent.values, 0, gravityArray, 0, gravityArray.length);
+                outfile = new File(dir, "Gravity.csv");
+                entry = String.format(Locale.CHINA,"gravity, %.4f, %.4f, %.4f\n", currentValue1, currentValue2, currentValue3);
+                break;
+            case Sensor.TYPE_LINEAR_ACCELERATION:
+                mTextSensorLinearAccelerometerX.setText(getResources().getString(R.string.linear_accelerometer_x, currentValue1));
+                mTextSensorLinearAccelerometerY.setText(getResources().getString(R.string.linear_accelerometer_y, currentValue2));
+                mTextSensorLinearAccelerometerZ.setText(getResources().getString(R.string.linear_accelerometer_z, currentValue3));
+                outfile = new File(dir, "LinearAccelerometer.csv");
+                System.arraycopy(sensorEvent.values, 0, linearAccelerometerArray, 0, linearAccelerometerArray.length);
+                entry = String.format(Locale.CHINA,"linear accelerometer, %.4f, %.4f, %.4f\n", currentValue1, currentValue2, currentValue3);
+                break;
+            case Sensor.TYPE_ROTATION_VECTOR:
+                SensorManager.getRotationMatrixFromVector(rotationMatrix, sensorEvent.values);
+                SensorManager.getOrientation(rotationMatrix, orientationAngles);
+                orientationAngles[0] = (float) (Math.toDegrees(orientationAngles[0])+360)%360;
+//                orientationAngles[0] = (float) ((orientationAngles[0] + 2*Math.PI)%(2*Math.PI));
+                mTextSensorAzimuth.setText(getResources().getString(R.string.azimuth,  Math.toDegrees(orientationAngles[0])));
+                mTextSensorPitch.setText(getResources().getString(R.string.pitch,  Math.toDegrees(orientationAngles[1])));
+                mTextSensorRoll.setText(getResources().getString(R.string.roll, Math.toDegrees(orientationAngles[2])));
+                outfile = new File(dir, "orientation.csv");
+                entry = String.format(Locale.CHINA, "orientation angles, %.4f, %.4f, %.4f\n",
+                        orientationAngles[0], orientationAngles[1], orientationAngles[2]);
                 break;
             default:
                 // leave it
