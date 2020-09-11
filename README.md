@@ -6,6 +6,8 @@ Sensor Monitor and Record<br>
 Changed File:<br> MainActivity.java<br>
               string.xml<br>
               activity_main.xml<br><br><br>
-09/06/2020 - 09/11/2020 : <br>1. refactor the orientation algorithm<br>
+09/06/2020 - 09/11/2020 : <br>1. rewrite the orientation algorithm<br>
                           2. test nod and rotate movements<br>
                           3. draw the trajectories in space<br><br>
+Changed File:<br> MainActivity.java<br>
+              PoseAndPosition.ipynb<br><br><br>
