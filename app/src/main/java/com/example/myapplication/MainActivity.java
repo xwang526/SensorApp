@@ -15,6 +15,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -37,10 +38,9 @@ public class MainActivity extends AppCompatActivity
 
     private float[] rotationMatrix = new float[16];
     private float[] invRotationMatrix = new float[16];
+    private float[] rotationAngles = new float[3];
     private float[] velocity = new float[3];
     private float[] displacement = new float[3];
-
-    private final float alpha = 0.8f;
 
     File dir;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity
         mSensorGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mSensorRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         mSensorGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        clearInfoForFile("globalAcce.csv");
+        clearInfoForFile("gyro.csv");
+        clearInfoForFile("rotationAngles.csv");
     }
 
     @Override
@@ -66,19 +69,19 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         if (mSensorLinearAccelerometer != null) {
             mSensorManager.registerListener(this, mSensorLinearAccelerometer,
-                    10000);
+                    2500);
         }
         if (mSensorMagnetometer != null) {
             mSensorManager.registerListener(this, mSensorMagnetometer,
-                    10000);
+                    2500);
         }
         if (mSensorGyroscope != null) {
             mSensorManager.registerListener(this, mSensorGyroscope,
-                    10000);
+                    2500);
         }
         if (mSensorRotationVector != null) {
             mSensorManager.registerListener(this, mSensorRotationVector,
-                    10000);
+                    2500);
         }
     }
 
@@ -98,7 +101,8 @@ public class MainActivity extends AppCompatActivity
                 mLinearAccelerometerData[0] = invRotationMatrix[0]*A[0] + invRotationMatrix[1]*A[1] + invRotationMatrix[2]*A[2];
                 mLinearAccelerometerData[1] = invRotationMatrix[4]*A[0] + invRotationMatrix[5]*A[1] + invRotationMatrix[6]*A[2];
                 mLinearAccelerometerData[2] = invRotationMatrix[8]*A[0] + invRotationMatrix[9]*A[1] + invRotationMatrix[10]*A[2];
-//                filterAcceleration();
+                filterAcceleration();
+//                getVelocity();
                 ToFile(mLinearAccelerometerData, "globalAcce.csv");
                 java.text.DecimalFormat df = new java.text.DecimalFormat("#0.000");
                 Log.i("Sensor","x=" +  df.format(mLinearAccelerometerData[0]) +
@@ -106,15 +110,18 @@ public class MainActivity extends AppCompatActivity
                 break;
             case Sensor.TYPE_ROTATION_VECTOR:
                 SensorManager.getRotationMatrixFromVector(rotationMatrix, sensorEvent.values);
+                SensorManager.getOrientation(rotationMatrix,rotationAngles);
+                ToFile(rotationAngles, "rotationAngles.csv");
                 android.opengl.Matrix.invertM(invRotationMatrix,0,rotationMatrix,0);
-//                Log.i("Sensor","r[8]"+rotationMatrix[8]+"i[2]"+invRotation[2]);
+//                Log.i("Sensor","yaw= "+Math.toDegrees(rotationAngles[0])+" pitch= "+Math.toDegrees(rotationAngles[1])+
+//                         " roll= "+Math.toDegrees(rotationAngles[2]));
                 break;
             case Sensor.TYPE_GRAVITY:
                 mGravityData = sensorEvent.values.clone();
                 break;
             case Sensor.TYPE_GYROSCOPE:
                 mGyroscopeData = sensorEvent.values.clone();
-                ToFile(mGyroscopeData, "Gyro.csv");
+                ToFile(mGyroscopeData,"gyro.csv");;
                 break;
             default:
                 return;
@@ -137,16 +144,32 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void clearInfoForFile(String fileName) {
+        dir = new File(getExternalFilesDir(null),"");
+        File file =new File(dir,fileName);
+        try {
+            if(!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter f =new FileWriter(file);
+            f.write("");
+            f.flush();
+            f.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void filterAcceleration() {
-        mLinearAccelerometerData[0] = ((mLinearAccelerometerData[0] < 0.02)&&(mLinearAccelerometerData[0] > -0.02))? 0:mLinearAccelerometerData[0];
-        mLinearAccelerometerData[1] = ((mLinearAccelerometerData[1] < 0.02)&&(mLinearAccelerometerData[1] > -0.02))? 0:mLinearAccelerometerData[1];
-        mLinearAccelerometerData[2] = ((mLinearAccelerometerData[2] < 0.02)&&(mLinearAccelerometerData[2] > -0.02))? 0:mLinearAccelerometerData[2];
+        float mag = (float) Math.sqrt(mLinearAccelerometerData[0]*mLinearAccelerometerData[0] +
+                mLinearAccelerometerData[1]*mLinearAccelerometerData[1] +
+                mLinearAccelerometerData[2]*mLinearAccelerometerData[2]);
+        float[] zeros = new float[3];
+        mLinearAccelerometerData = (mag < 0.035)? zeros :mLinearAccelerometerData;
     }
 
     public void getVelocity() {
-        mLinearAccelerometerData[0] = ((mLinearAccelerometerData[0] < 0.02)&&(mLinearAccelerometerData[0] > -0.02))? 0:mLinearAccelerometerData[0];
-        mLinearAccelerometerData[1] = ((mLinearAccelerometerData[1] < 0.02)&&(mLinearAccelerometerData[1] > -0.02))? 0:mLinearAccelerometerData[1];
-        mLinearAccelerometerData[2] = ((mLinearAccelerometerData[2] < 0.02)&&(mLinearAccelerometerData[2] > -0.02))? 0:mLinearAccelerometerData[2];
+//        filterAcceleration();
         velocity[0] = (float) (velocity[0]+mLinearAccelerometerData[0]*0.02);
         velocity[1] = (float) (velocity[1]+mLinearAccelerometerData[1]*0.02);
         velocity[2] = (float) (velocity[2]+mLinearAccelerometerData[2]*0.02);
