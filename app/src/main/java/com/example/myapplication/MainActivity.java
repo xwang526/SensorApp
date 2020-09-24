@@ -1,11 +1,9 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -36,8 +34,7 @@ public class MainActivity extends AppCompatActivity
     private float[] mGyroscopeData = new float[3];
     private float[] mMagnetometerData = new float[3];
 
-    private float[] rotationMatrix = new float[16];
-    private float[] invRotationMatrix = new float[16];
+    private float[] rotationMatrix = new float[9];
     private float[] rotationAngles = new float[3];
     private float[] velocity = new float[3];
     private float[] displacement = new float[3];
@@ -98,11 +95,10 @@ public class MainActivity extends AppCompatActivity
         switch (sensorType) {
             case Sensor.TYPE_LINEAR_ACCELERATION:
                 float[] A = sensorEvent.values.clone();
-                mLinearAccelerometerData[0] = invRotationMatrix[0]*A[0] + invRotationMatrix[1]*A[1] + invRotationMatrix[2]*A[2];
-                mLinearAccelerometerData[1] = invRotationMatrix[4]*A[0] + invRotationMatrix[5]*A[1] + invRotationMatrix[6]*A[2];
-                mLinearAccelerometerData[2] = invRotationMatrix[8]*A[0] + invRotationMatrix[9]*A[1] + invRotationMatrix[10]*A[2];
+                mLinearAccelerometerData[0] = rotationMatrix[0]*A[0] + rotationMatrix[1]*A[1] + rotationMatrix[2]*A[2];
+                mLinearAccelerometerData[1] = rotationMatrix[3]*A[0] + rotationMatrix[4]*A[1] + rotationMatrix[5]*A[2];
+                mLinearAccelerometerData[2] = rotationMatrix[6]*A[0] + rotationMatrix[7]*A[1] + rotationMatrix[8]*A[2];
                 filterAcceleration();
-//                getVelocity();
                 ToFile(mLinearAccelerometerData, "globalAcce.csv");
                 java.text.DecimalFormat df = new java.text.DecimalFormat("#0.000");
                 Log.i("Sensor","x=" +  df.format(mLinearAccelerometerData[0]) +
@@ -112,7 +108,6 @@ public class MainActivity extends AppCompatActivity
                 SensorManager.getRotationMatrixFromVector(rotationMatrix, sensorEvent.values);
                 SensorManager.getOrientation(rotationMatrix,rotationAngles);
                 ToFile(rotationAngles, "rotationAngles.csv");
-                android.opengl.Matrix.invertM(invRotationMatrix,0,rotationMatrix,0);
 //                Log.i("Sensor","yaw= "+Math.toDegrees(rotationAngles[0])+" pitch= "+Math.toDegrees(rotationAngles[1])+
 //                         " roll= "+Math.toDegrees(rotationAngles[2]));
                 break;
@@ -121,10 +116,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case Sensor.TYPE_GYROSCOPE:
                 mGyroscopeData = sensorEvent.values.clone();
-                ToFile(mGyroscopeData,"gyro.csv");;
+                ToFile(mGyroscopeData,"gyro.csv");
                 break;
             default:
-                return;
+                // leave it~
         }
     }
 
@@ -165,22 +160,7 @@ public class MainActivity extends AppCompatActivity
                 mLinearAccelerometerData[1]*mLinearAccelerometerData[1] +
                 mLinearAccelerometerData[2]*mLinearAccelerometerData[2]);
         float[] zeros = new float[3];
-        mLinearAccelerometerData = (mag < 0.035)? zeros :mLinearAccelerometerData;
-    }
-
-    public void getVelocity() {
-//        filterAcceleration();
-        velocity[0] = (float) (velocity[0]+mLinearAccelerometerData[0]*0.02);
-        velocity[1] = (float) (velocity[1]+mLinearAccelerometerData[1]*0.02);
-        velocity[2] = (float) (velocity[2]+mLinearAccelerometerData[2]*0.02);
-    }
-    public void getDisplacement() {
-        velocity[0] = ((mLinearAccelerometerData[0] < 0.02)&&(mLinearAccelerometerData[0] > -0.02))? 0:velocity[0];
-        velocity[1] = ((mLinearAccelerometerData[1] < 0.02)&&(mLinearAccelerometerData[1] > -0.02))? 0:velocity[1];
-        velocity[2] = ((mLinearAccelerometerData[2] < 0.02)&&(mLinearAccelerometerData[2] > -0.02))? 0:velocity[2];
-        displacement[0] = (float) (displacement[0] + velocity[0]*0.02);
-        displacement[1] = (float) (displacement[1] + velocity[1]*0.02);
-        displacement[2] = (float) (displacement[2] + velocity[2]*0.02);
+        mLinearAccelerometerData = (mag < 0.08)? zeros :mLinearAccelerometerData;
     }
 
     /**
